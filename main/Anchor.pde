@@ -15,18 +15,16 @@ class Anchor {
     pos.set(x, y);
   }
   
-  void changeRadius(float r){
-    radius = r;
-  }
-  
   void show(){
     noFill();
     strokeWeight(1);
     stroke(65);
+    //External circunference that shows the distance constraint
     circle(pos.x, pos.y, radius * 2);
     
     strokeWeight(radius * .2);
     stroke(255);
+    //Anchor
     point(pos.x, pos.y);
   }
   
@@ -42,6 +40,7 @@ class Anchor {
     return radius;
   }
   
+  //Get the vector that points from the anchor to the external point
   PVector getVectorConstraint(PVector p){
     return p.copy().sub(pos).setMag(radius);
   }
@@ -50,6 +49,7 @@ class Anchor {
     return other.getPosCopy().sub(pos).setMag(radius);
   }
   
+  //Constraint the other point to the desired distance
   void constraint(Anchor other){
     PVector dir = this.getVectorConstraint(other).add(pos);
     other.update(dir);
