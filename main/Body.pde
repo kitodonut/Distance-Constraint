@@ -1,9 +1,10 @@
 class Body{
-  private Anchor[] spine;
-  private PVector headPos, vel, acc;
-  private float mass;
+  protected Anchor[] spine;
+  protected PVector headPos, vel, acc;
+  protected float mass;
 
-  Body(float x, float y, float[] radius){
+  Body(float x, float y, float[] radius, float scl /*scale is a key word*/){
+    if(scl != 1.0) radius = scaleRadius(radius, scl);
     spine = new Anchor[radius.length];
     
     float previousRadius = 0;
@@ -23,6 +24,8 @@ class Body{
   void update(){
     edges();
     
+    //Needs to impose an angle constraint (spine's level of flexivility)
+    
     vel.add(acc);
     headPos.add(vel);
     
@@ -36,7 +39,7 @@ class Body{
   
   void applyForce(PVector force){
     // F = m * a
-    acc.set(force.div(mass));
+    acc.add(force.div(mass));
   }
   
   void setVel(PVector v){
@@ -48,8 +51,26 @@ class Body{
       p.show();
   }
   
+  Anchor getHead(){
+    return spine[0];
+  }
+  
+  Anchor getTail(){
+    return spine[spine.length - 1];
+  }
+  
   private void edges(){
     if(headPos.x + vel.x >= width || headPos.x + vel.x <= 0) vel.set(-vel.x, vel.y);
     if(headPos.y + vel.y >= height || headPos.y + vel.y <= 0) vel.set(vel.x, -vel.y);
+  }
+  
+  private float[] scaleRadius(float[] original, float scale) {
+    float[] scaled = new float[original.length];
+    for (int i = 0; i < original.length; i++) {
+      scaled[i] = original[i] * scale;
+      
+      if(scaled[i] < 1.0) scaled[i] = 1.0;
+    }
+    return scaled;
   }
 }

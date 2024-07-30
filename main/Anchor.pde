@@ -25,7 +25,7 @@ class Anchor {
     stroke(65);
     circle(pos.x, pos.y, radius * 2);
     
-    strokeWeight(8);
+    strokeWeight(radius * .2);
     stroke(255);
     point(pos.x, pos.y);
   }
